@@ -6,6 +6,12 @@ terraform {
     }
   }
 }
+# ssh keys
+resource "digitalocean_ssh_key" "default" {
+  name       = "Terraform Example"
+  public_key = file("${path.module}/files/id_rsa.pub")
+}
+
 
 provider "digitalocean" {
 }
@@ -16,8 +22,15 @@ resource "digitalocean_droplet" "example" {
   image  = "ubuntu-20-04-x64"
   region = "nyc1"
   tags   = ["web"]
+  monitoring = true
+  private_networking = true
+  ssh_keys = [
+    digitalocean_ssh_key.example.id
+  ]
+  user_data = file("${path.module}/files/user-data.sh")
 }
 
 output "droplet_ip" {
   value = digitalocean_droplet.example.ipv4_address
 }
+
