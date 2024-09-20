@@ -17,6 +17,9 @@ This repository contains Infrastructure as Code (IaC) for provisioning and confi
 
 ### Step 1 
 
+Create your digital ocean token, and set your environment variable called DIGITALOCEAN_TOKEN to that value.
+
+- Install the terraform digital ocena provider
 (todo)
 
 

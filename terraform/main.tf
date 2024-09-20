@@ -10,6 +10,7 @@ terraform {
 resource "digitalocean_domain" "domain"{
   name = "k3vinwvng.com"
 }
+
 # ssh keys
 resource "digitalocean_ssh_key" "k3vinwvng" {
   name       = "Terraform k3vinwvng"
@@ -38,8 +39,7 @@ resource "digitalocean_droplet" "k3vinwvng" {
   ssh_keys = [
     digitalocean_ssh_key.k3vinwvng.id
   ]
-  user_data = file("${path.module}/files/user-data.sh")
-}
+  }
 
 output "droplet_ip" {
   value = digitalocean_droplet.k3vinwvng.ipv4_address
