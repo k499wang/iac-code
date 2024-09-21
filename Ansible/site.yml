@@ -1,0 +1,8 @@
+---
+- hosts: vps
+  become: true
+  roles:
+    - nginx
+    - tests
+
+;; ansible-playbook -i inventory site.yml
