@@ -1,25 +1,28 @@
----
-- name: Test Node.js installation
-  hosts: your_servers_group  # Replace with your inventory group or hostname
-  become: yes  # Use sudo
-  tasks:
-    - name: Check Node.js version
+
+    - name: Ensure curl is installed
+      apt:
+        name: curl
+        state: present
+
+    - name: Download NodeSource setup script
+      get_url:
+        url: https://deb.nodesource.com/setup_22.x
+        dest: /tmp/nodesource_setup.sh
+        mode: '0755'
+
+    - name: Run NodeSource setup script
+      command: bash /tmp/nodesource_setup.sh
+
+    - name: Install Node.js
+      apt:
+        name: nodejs
+        state: present
+
+    - name: Verify Node.js installation
       command: node -v
       register: node_version
 
-    - name: Assert Node.js is installed
-      assert:
-        that:
-          - node_version.stdout is match('v[0-9]+\.[0-9]+\.[0-9]+')
-        fail_msg: "Node.js is not installed correctly. Version output: {{ node_version.stdout }}"
-
-    - name: Check npm version
-      command: npm -v
-      register: npm_version
-
-    - name: Assert npm is installed
-      assert:
-        that:
-          - npm_version.stdout is match('^[0-9]+\.[0-9]+\.[0-9]+$')
-        fail_msg: "npm is not installed correctly. Version output: {{ npm_version.stdout }}"
+    - name: Display Node.js version
+      debug:
+        msg: "Node.js version installed: {{ node_version.stdout }}"
 

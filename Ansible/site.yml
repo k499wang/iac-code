@@ -1,7 +1,7 @@
 ---
 - name: Install Node.js, npm, and PM2
-  hosts: vps  # Replace with your inventory group or hostname
-  become: true  # Use sudo
+  hosts: vps  
+  become: true  
   roles:
     - npm
     - tests

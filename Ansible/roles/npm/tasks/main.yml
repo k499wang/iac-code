@@ -1,27 +1,27 @@
----
-- name: Update APT package index
-  apt:
-    update_cache: yes
 
-- name: Install required packages for NodeSource
-  apt:
-    name: 
-      - curl
-      - software-properties-common
-    state: present
+    - name: Ensure curl is installed
+      apt:
+        name: curl
+        state: present
 
-- name: Download NodeSource setup script
-  get_url:
-    url: https://deb.nodesource.com/setup_21.x
-    dest: /tmp/nodesource_setup.sh
-    mode: '0755'
+    - name: Download NodeSource setup script
+      get_url:
+        url: https://deb.nodesource.com/setup_22.x
+        dest: /tmp/nodesource_setup.sh
+        mode: '0755'
 
-- name: Run NodeSource setup script
-  command: bash /tmp/nodesource_setup.sh
+    - name: Run NodeSource setup script
+      command: bash /tmp/nodesource_setup.sh
 
+    - name: Install Node.js
+      apt:
+        name: nodejs
+        state: present
 
-- name: Install Node.js
-  apt:
-    name: nodejs
-    state: present
+    - name: Verify Node.js installation
+      command: node -v
+      register: node_version
 
+    - name: Display Node.js version
+      debug:
+        msg: "Node.js version installed: {{ node_version.stdout }}"
