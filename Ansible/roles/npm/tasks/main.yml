@@ -22,6 +22,37 @@
       command: node -v
       register: node_version
 
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Create Nginx configuration file
+      copy:
+        dest: /etc/nginx/sites-available/astro.conf
+        content: |
+          server {
+              listen 80;
+              server_name k3vinsite.com www.k3vinsite.com;
+
+              root /var/www/astro;
+              index index.html;
+
+              location / {
+                  try_files $uri $uri/ /index.html;
+              }
+          }
+      notify: reload nginx
+
+    - name: Enable the site
+      command: nginx -s reload
+      notify: reload nginx
+
+    - name: Remove the default Nginx site
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
     - name: Display Node.js version
       debug:
         msg: "Node.js version installed: {{ node_version.stdout }}"
