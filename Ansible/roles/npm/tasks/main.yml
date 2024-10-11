@@ -42,7 +42,6 @@
                   try_files $uri $uri/ /index.html;
               }
           }
-      notify: reload nginx
 
     - name: Enable the site
       command: nginx -s reload
