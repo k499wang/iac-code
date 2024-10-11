@@ -1,10 +1,25 @@
 ---
-- name: Ensure Nginx is installed
-  apt:
-    name: nginx
-    state: present
+- name: Test Node.js installation
+  hosts: your_servers_group  # Replace with your inventory group or hostname
+  become: yes  # Use sudo
+  tasks:
+    - name: Check Node.js version
+      command: node -v
+      register: node_version
 
-- name: Check if Nginx service is running
-  service:
-    name: nginx
-    state: started
+    - name: Assert Node.js is installed
+      assert:
+        that:
+          - node_version.stdout is match('v[0-9]+\.[0-9]+\.[0-9]+')
+        fail_msg: "Node.js is not installed correctly. Version output: {{ node_version.stdout }}"
+
+    - name: Check npm version
+      command: npm -v
+      register: npm_version
+
+    - name: Assert npm is installed
+      assert:
+        that:
+          - npm_version.stdout is match('^[0-9]+\.[0-9]+\.[0-9]+$')
+        fail_msg: "npm is not installed correctly. Version output: {{ npm_version.stdout }}"
+

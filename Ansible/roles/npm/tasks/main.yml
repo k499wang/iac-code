@@ -1,0 +1,22 @@
+---
+- name: Update APT package index
+  apt:
+    update_cache: yes
+
+- name: Install required packages for NodeSource
+  apt:
+    name: 
+      - curl
+      - software-properties-common
+    state: present
+
+- name: Add NodeSource repository
+  command: curl -fsSL https://deb.nodesource.com/setup_21.x | bash -
+  register: add_nodesource
+  ignore_errors: yes  # Ignore errors if already added
+
+- name: Install Node.js
+  apt:
+    name: nodejs
+    state: present
+

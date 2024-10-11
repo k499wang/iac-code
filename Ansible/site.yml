@@ -1,8 +1,7 @@
 ---
-- hosts: vps
-  become: true
+- name: Install Node.js, npm, and PM2
+  hosts: vps  # Replace with your inventory group or hostname
+  become: true  # Use sudo
   roles:
-    - nginx
+    - npm
     - tests
-
-;; ansible-playbook -i inventory site.yml
