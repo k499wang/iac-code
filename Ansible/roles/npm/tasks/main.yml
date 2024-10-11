@@ -10,10 +10,15 @@
       - software-properties-common
     state: present
 
-- name: Add NodeSource repository
-  command: curl -fsSL https://deb.nodesource.com/setup_21.x | bash -
-  register: add_nodesource
-  ignore_errors: yes  # Ignore errors if already added
+- name: Download NodeSource setup script
+  get_url:
+    url: https://deb.nodesource.com/setup_21.x
+    dest: /tmp/nodesource_setup.sh
+    mode: '0755'
+
+- name: Run NodeSource setup script
+  command: bash /tmp/nodesource_setup.sh
+
 
 - name: Install Node.js
   apt:
