@@ -45,7 +45,6 @@
 
     - name: Enable the site
       command: nginx -s reload
-      notify: reload nginx
 
     - name: Remove the default Nginx site
       file:
